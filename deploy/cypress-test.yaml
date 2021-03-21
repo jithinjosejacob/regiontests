@@ -1,0 +1,29 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: cypress-test-
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: cypress-test    
+    spec:
+      restartPolicy: Never
+      serviceAccount: cypress-test-sa
+      containers: 
+        - name: cypress-test
+          image: uditgaurav/cypress:ci
+          imagePullPolicy: Always
+          env:
+            - name: CYPRESS_region
+              value: ca
+            - name: AWS_ACCESS_KEY_ID
+              value: $(AWS_ACCESS_KEY_ID)
+            - name: AWS_SECRET_ACCESS_KEY
+              value: $(AWS_SECRET_ACCESS_KEY)                        
+          command: ["/bin/bash"]
+          args:
+          - -c 
+          - npm run test

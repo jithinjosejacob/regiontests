@@ -30,3 +30,13 @@ Step4: Run - npm run test(This will trigger tests and open microsoft website spe
 ##Run Tests inside Docker##
 
 Step1:Run Command docker-compose up
+
+# Run Test Using Kubernetes
+
+**Note:** We are now not using docker-compose.yml so we can remove it as well.
+
+**Pre-requisites:**
+
+- You need to have an active kuernetes cluster installed and running with `kubectl` commands.
+
+- Run `./deploy/entrypoint.sh`: The test will be automatically performed across the regions and you'll get the logs as [shown here](deploy/logs.txt). 

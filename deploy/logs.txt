@@ -1,0 +1,194 @@
+serviceaccount/cypress-test-sa created
+role.rbac.authorization.k8s.io/cypress-test-sa created
+rolebinding.rbac.authorization.k8s.io/cypress-test-sa created
+Preparing cypress test for region: au
+job.batch/cypress-test-62kc5 created
+Preparing cypress test for region: us
+job.batch/cypress-test-8f2dz created
+Preparing cypress test for region: ca
+job.batch/cypress-test-gjpzr created
+pod/cypress-test-62kc5-jdmx7 condition met
+pod/cypress-test-8f2dz-cg9c4 condition met
+pod/cypress-test-gjpzr-fpczk condition met
+  │ Cypress:    6.8.0                                                                              │
+  │ Browser:    Electron 87 (headless)                                                             │
+  │ Specs:      1 found (visitMicrosoft.js)                                                        │
+  │ Searched:   cypress/integration/**.js                                                          │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  visitMicrosoft.js                                                               (1 of 1)
+
+> regiontests@1.0.0 test /apt-agency-api-testing
+
+> regiontests@1.0.0 test /apt-agency-api-testing
+> npx cypress run --spec 'cypress/integration/**.js' --headless
+
+> npx cypress run --spec 'cypress/integration/**.js' --headless
+
+
+================================================================================
+
+  (Run Starting)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Cypress:    6.8.0                                                                              │
+  │ Browser:    Electron 87 (headless)                                                             │
+  │ Specs:      1 found (visitMicrosoft.js)                                                        │
+  │ Searched:   cypress/integration/**.js                                                          │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  visitMicrosoft.js                                                               (1 of 1)
+
+
+  Check Microsoft Website
+
+================================================================================
+
+  (Run Starting)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Cypress:    6.8.0                                                                              │
+  │ Browser:    Electron 87 (headless)                                                             │
+  │ Specs:      1 found (visitMicrosoft.js)                                                        │
+  │ Searched:   cypress/integration/**.js                                                          │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  visitMicrosoft.js                                                               (1 of 1)
+
+
+  Check Microsoft Website
+
+
+  Check Microsoft Website
+    ✓ Check Microsoft Website for every region (7404ms)
+
+
+  1 passing (10s)
+
+    ✓ Check Microsoft Website for every region (5008ms)
+
+
+  1 passing (9s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        1                                                                                │
+  │ Passing:      1                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        true                                                                             │
+  │ Duration:     10 seconds                                                                       │
+  │ Spec Ran:     visitMicrosoft.js                                                                │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+  (Video)
+
+  -  Started processing:  Compressing to 32 CRF                                                     
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        1                                                                                │
+  │ Passing:      1                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        true                                                                             │
+  │ Duration:     7 seconds                                                                        │
+  │ Spec Ran:     visitMicrosoft.js                                                                │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+  (Video)
+
+  -  Started processing:  Compressing to 32 CRF                                                     
+    ✓ Check Microsoft Website for every region (20961ms)
+
+
+  1 passing (24s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        1                                                                                │
+  │ Passing:      1                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        true                                                                             │
+  │ Duration:     23 seconds                                                                       │
+  │ Spec Ran:     visitMicrosoft.js                                                                │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+  (Video)
+
+  -  Started processing:  Compressing to 32 CRF                                                     
+  -  Finished processing: /apt-agency-api-testing/cypress/videos/visitMicrosoft.js.mp    (5 seconds)
+                          4                                                                         
+
+
+================================================================================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing  Pending  Skipped  
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ ✔  visitMicrosoft.js                        00:07        1        1        -        -        - │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+    ✔  All specs passed!                        00:07        1        1        -        -        -  
+
+  -  Finished processing: /apt-agency-api-testing/cypress/videos/visitMicrosoft.js.mp    (7 seconds)
+                          4                                                                         
+
+
+================================================================================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing  Pending  Skipped  
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ ✔  visitMicrosoft.js                        00:10        1        1        -        -        - │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+    ✔  All specs passed!                        00:10        1        1        -        -        -  
+
+  -  Finished processing: /apt-agency-api-testing/cypress/videos/visitMicrosoft.js.mp    (6 seconds)
+                          4                                                                         
+
+
+================================================================================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing  Pending  Skipped  
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ ✔  visitMicrosoft.js                        00:23        1        1        -        -        - │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+    ✔  All specs passed!                        00:23        1        1        -        -        -  
+
+serviceaccount "cypress-test-sa" deleted
+role.rbac.authorization.k8s.io "cypress-test-sa" deleted
+rolebinding.rbac.authorization.k8s.io "cypress-test-sa" deleted
+job.batch "cypress-test-62kc5" deleted
+job.batch "cypress-test-8f2dz" deleted
+job.batch "cypress-test-gjpzr" deleted
