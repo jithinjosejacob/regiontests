@@ -1,0 +1,23 @@
+{
+  "name": "regiontests",
+  "version": "1.0.0",
+  "description": "Microsoft Website Region Tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress run --spec 'cypress/integration/**.js' --headless"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jithinjosejacob/regiontests.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jithinjosejacob/regiontests/issues"
+  },
+  "homepage": "https://github.com/jithinjosejacob/regiontests#readme",
+  "dependencies": {
+    "cypress": "^6.8.0"
+  }
+}

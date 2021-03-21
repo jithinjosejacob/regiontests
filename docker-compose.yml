@@ -1,0 +1,12 @@
+# Run tests with the environment variables set in pipeline
+version: '2'
+services:
+ cypress:
+   build:
+     context: .
+     dockerfile: Dockerfile
+   command: npm run test
+   environment:
+    - CYPRESS_region=${CYPRESS_region}
+    - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
