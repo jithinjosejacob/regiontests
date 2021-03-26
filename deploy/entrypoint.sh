@@ -22,7 +22,7 @@ kubectl create -f deploy/cypress-all-region-test.yaml
 rm -rf deploy/cypress-all-region-test.yaml
 
 # Waiting for all job pods to get in running state
-kubectl wait --for=condition=Ready pods -l app=cypress-test --request-timeout 5m
+kubectl wait --for=condition=Ready pods -l app=cypress-test --request-timeout 20m
 
 # Printing logs for all the pods
 kubectl logs -f -l app=cypress-test
