@@ -8,17 +8,16 @@ spec:
   template:
     metadata:
       labels:
-        app: cypress-test    
+        run: cypress-test-unique    
     spec:
       restartPolicy: Never
-      serviceAccount: cypress-test-sa
       containers: 
         - name: cypress-test
           image: uditgaurav/cypress:ci # please update with your image.
           imagePullPolicy: Always
           env:
             - name: CYPRESS_region # It will take all regions one by one and create pods from entrypoint.sh script
-              value: ca
+              value: pk
             - name: AWS_ACCESS_KEY_ID
               value: $(AWS_ACCESS_KEY_ID)
             - name: AWS_SECRET_ACCESS_KEY
