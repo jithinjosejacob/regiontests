@@ -4,10 +4,10 @@
 
 set -e 
 
-NS="default"
+NS="training"
 
 # Declare an array of all target regions to run the test
-declare -a regions=("au" "us" "ca" "au" "us" "ca" "pk")
+declare -a regions=("au" "us" "ca" "au" "us")
 
 touch deploy/cypress-all-region-test.yaml
 # Prepare the test jobs for all the regions
@@ -26,7 +26,7 @@ echo "Waiting for all test pods to get completed .........."
 declare -a array=$( kubectl get pods -n $NS -l run=cypress-test-unique -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}" )
 RETRIES=50
 for i in ${array[@]}; do
-   while ([ "$( kubectl get pods -n $NS $i -o=jsonpath='{.status.phase}' )" != "Succeeded" ]); do
+   while ([ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.phase}' )" != "Succeeded" ]); do
       echo "Waiting for \"$i\" to get completed ... $RETRIES retries left."
       sleep 10
       RETRIES=$((RETRIES-1))
@@ -41,7 +41,7 @@ head="true"
 FAILED_TESTS=()
 PASSED_TESTS=()
 for i in ${array[@]}; do
-   if [ "$( kubectl get pods -n $NS $i -o=jsonpath='{.status.phase}' )" != "Succeeded" ]; then
+   if [ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.phase}' )" != "Succeeded" ]; then
       if [ ${head} == "true" ]; then
          echo
          echo "Failed test pods are:"
@@ -60,16 +60,16 @@ if [ "${INDEX}" == "1" ];then
    echo "Congratulations all tests ran successfully!!!"
    echo "Printing Logs for all the tests...."
    for i in ${array[@]}; do
-         kubectl logs -n $NS $i -c cypress-test
+         kubectl logs $i -n $NS -c cypress-test
    done   
 else
    echo "LOGS OF PASSED TESTS ................"
    for i in ${PASSED_TESTS[@]}; do
-         kubectl logs -n $NS $i -c cypress-test
+         kubectl logs $i -n $NS -c cypress-test
    done
    echo "LOGS OF FAILED TESTS .............."
    for i in ${FAILED_TESTS[@]}; do
-         kubectl logs -n $NS $i -c cypress-test
+         kubectl logs $i -n $NS -c cypress-test
    done
 fi
 

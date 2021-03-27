@@ -17,7 +17,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: CYPRESS_region # It will take all regions one by one and create pods from entrypoint.sh script
-              value: pk
+              value: us
             - name: AWS_ACCESS_KEY_ID
               value: $(AWS_ACCESS_KEY_ID)
             - name: AWS_SECRET_ACCESS_KEY
