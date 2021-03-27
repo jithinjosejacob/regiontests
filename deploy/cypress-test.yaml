@@ -16,6 +16,11 @@ spec:
           image: uditgaurav/cypress:ci # please update with your image.
           imagePullPolicy: Always
           env:
+            - name: TEST_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: cypress-test           
+                  key: area    
             - name: CYPRESS_region # It will take all regions one by one and create pods from entrypoint.sh script
               value: us
             - name: AWS_ACCESS_KEY_ID

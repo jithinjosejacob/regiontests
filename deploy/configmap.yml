@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cypress-test
+data:
+  # property-like keys; each key maps to a simple value
+  area: "regionTest"
