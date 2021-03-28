@@ -140,3 +140,29 @@ $ kubectl logs -f cypress-test-cftxq-t5c8t
   └────────────────────────────────────────────────────────────────────────────────────────────────┘
     ✔  All specs passed!                        00:06        1        1        -        -        -  
 ```
+
+## Secret Maanger
+
+```bash
+the platform/app helm chart supports creating a secret from Secrets Manager via values
+
+externalSecret:
+enabled: true
+backendType: secretsManager
+keyPaths:
+- name: SUPER_SECRET_VAR
+  key: /platform/application/namespace/servicename/environmentname/secretname 
+
+region="ap-southeast-2"
+namespace="namespace"
+service="servicename"
+environment="environmentname"
+secret="secretname2"
+account_id="$(aws sts get-caller-identity --query Account --output text)"
+secret_name="/platform/application/${namespace}/${service}/${environment}/${secret}"
+secret_id="arn:aws:secretsmanager:${region}:${account_id}:secret:${secret_name}"
+aws secretsmanager create-secret --region ${region} --name ${secret_name} \
+--secret-string file://mycreds.txt
+aws secretsmanager tag-resource --region ${region} --secret-id ${secret_id} \
+--tags Key=Cluster,Value=${cluster} Key=Namespace,Value=${namespace} Key=Service,Value=${service} Key=Environment,Value=${environment} 
+```
