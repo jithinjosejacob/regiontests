@@ -27,6 +27,7 @@ declare -a array=$( kubectl get pods -n $NS -l run=cypress-test-unique -o=jsonpa
 RETRIES=50
 for i in ${array[@]}; do
    while ([ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.phase}' )" != "Succeeded" ]); do
+      kubectl get pods -n $NS
       echo "Waiting for \"$i\" to get completed ... $RETRIES retries left."
       sleep 10
       RETRIES=$((RETRIES-1))
