@@ -3,5 +3,8 @@ kind: ConfigMap
 metadata:
   name: cypress-test
 data:
-  # property-like keys; each key maps to a simple value
-  area: "regionTest"
+  requestApiKey: ZTZ6YoFRTcTTaWRrYoF75E7g5JWpHuswG44NdXcjObI
+  apiUrl: https://agencyapi.qa.afterpay-beta.com
+  apiHostUrl: https://api.qa.afterpay-beta.com
+  onboardingUrl: https://agencyapi.qa.afterpay-beta.com/v1/onboardings/   
+
