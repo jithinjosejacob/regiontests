@@ -1,52 +1,55 @@
 #!/bin/bash
-# This script is for running cypress 
-# tests in parallel for all aws regions
+# This script is for running cypress
 
-set -e 
+#set -e
 
 NS="training"
 
 ## Install dependencies to run j2 command
-apt-get update && apt-get install -y --no-install-recommends python-pip
-pip install j2
+#python3 -m ensurepip
+#pip3 install --no-cache --upgrade pip setuptools
+pip install j2cli[yaml]
 
-## Exporting default values for the given variables
-export CYPRESS_requestApiKey="${CYPRESS_requestApiKey:-default}"
-export CYPRESS_onboardingUrl="${CYPRESS_onboardingUrl:-default}"
-export CYPRESS_apiUrl="${CYPRESS_apiUrl:-default}"
-export CYPRESS_apiHostUrl="${CYPRESS_apiHostUrl:-default}"
-export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-default}"
-export AWS_REGION="${AWS_REGION:-default}"
-export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID:-default}"
-export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY:-default}"
-export AWS_REGION="${AWS_REGION:-default}"
+chmod +x ./deploy/j2
+
+#Exporting default values for the given variables
+CYPRESS_sharedSecret="${CYPRESS_sharedSecret:-default}"
+#CYPRESS_requestApiKey="${CYPRESS_requestApiKey:-default}"
+CYPRESS_onboardingUrl="${CYPRESS_onboardingUrl:-default}"
+CYPRESS_apiUrl="${CYPRESS_apiUrl:-default}"
+CYPRESS_apiHostUrl="${CYPRESS_apiHostUrl:-default}"
+AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-default}"
+AWS_REGION="${AWS_REGION:-default}"
+AWS_ACCESS_KEY_ID_2="${AWS_ACCESS_KEY_ID_2:-default}"
+AWS_SECRET_ACCESS_KEY_2="${AWS_SECRET_ACCESS_KEY_2:-default}"
 
 ## Running j2 command to setup variables in the yaml
-j2 cypress-test.j2 > cypress-test.yaml
-
+./deploy/j2 deploy/cypress-test.j2 > deploy/cypress-test.yaml
 # Declare an array of all target regions to run the test
-declare -a regions=("au" "us" "ca" "au" "us")
+declare -a regions=("AU")
 
 touch deploy/cypress-all-region-test.yaml
 # Prepare the test pods for all the regions
 for val in ${regions[@]}; do
-   sed -i "/name: CYPRESS_region/{n;s/.*/          value: "$val"/}" deploy/cypress-test.yaml
+   sed -i "/name: CYPRESS_testType/{n;s/.*/              value: "$val"/}" deploy/cypress-test.yaml
    cat deploy/cypress-test.yaml >> deploy/cypress-all-region-test.yaml
 done
 
 # Create the cypress test
 kubectl create -f deploy/cypress-all-region-test.yaml -n $NS
 rm -rf deploy/cypress-all-region-test.yaml
-echo 
+echo
 
 # Waiting for the test to get completed
 echo "Waiting for all test pods to get completed .........."
 declare -a array=$( kubectl get pods -n $NS -l run=cypress-test-unique -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}" )
-RETRIES=50
+RETRIES=15
 for i in ${array[@]}; do
    while ([ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.phase}' )" != "Succeeded" ]); do
+      kubectl get pods -n $NS
       echo "Waiting for \"$i\" to get completed ... $RETRIES retries left."
       sleep 10
+      #kubectl describe pod -n $NS -l run=cypress-test-unique
       RETRIES=$((RETRIES-1))
       if [ $RETRIES == "0" ]; then break; fi
    done
@@ -61,7 +64,6 @@ PASSED_TESTS=()
 for i in ${array[@]}; do
    if [ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.phase}' )" != "Succeeded" ]; then
       if [ ${head} == "true" ]; then
-         echo
          echo "Failed test pods are:"
          head="false"
       fi
@@ -79,7 +81,7 @@ if [ "${INDEX}" == "1" ];then
    echo "Printing Logs for all the tests...."
    for i in ${array[@]}; do
          kubectl logs $i -n $NS -c cypress-test
-   done   
+   done
 else
    echo "LOGS OF PASSED TESTS ................"
    for i in ${PASSED_TESTS[@]}; do
@@ -92,7 +94,7 @@ else
 fi
 
 # Cleanup the test pods
-kubectl delete pods -n $NS -l run=cypress-test-unique
+kubectl delete jobs -n $NS -l run=cypress-test-unique
 rm -rf deploy/cypress-test.yaml
 if [ "${INDEX}" != "1" ];then
    echo "Some cypress tests failed please check the above logs for the details"
