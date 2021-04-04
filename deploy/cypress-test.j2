@@ -1,44 +1,42 @@
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: batch/v1
+kind: Job
 metadata:
   generateName: cypress-test-
-  labels:
-    run: cypress-test-unique    
 spec:
-  containers: 
-    - name: cypress-test
-      image: uditgaurav/cypress:ci # please update with your image.
-      imagePullPolicy: Always
-      env:
-        - name: CYPRESS_type # It will take all regions one by one and create pods from entrypoint.sh script
-          value: ''
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        run: cypress-test-unique
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: cypress-test
+          image: cypress:latest
+          imagePullPolicy: Always
+          readinessProbe:
+            tcpSocket:
+              port: 15021
+            initialDelaySeconds: 300
+            periodSeconds: 30
+          env:
+            - name: CYPRESS_testType # It will take all regions one by one and create pods from entrypoint.sh script
+              value: ''
+            - name: CYPRESS_sharedSecret
+              value: {{ CYPRESS_sharedSecret }}
+            - name: CYPRESS_onboardingUrl
+              value: {{ CYPRESS_onboardingUrl }}
+            - name: CYPRESS_apiUrl
+              value: {{ CYPRESS_apiUrl }}
+            - name: CYPRESS_apiHostUrl
+              value: {{ CYPRESS_apiHostUrl }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ AWS_DEFAULT_REGION }}
+            - name: AWS_REGION
+              value: {{ AWS_REGION }}
+          command: ["/bin/bash"]
+          args:
+          - -c
+          - DEBUG=cypress:server:plugins DEBUG_DEPTH=0 npm run test_ci
 
-        - name: CYPRESS_requestApiKey
-          value: {{ CYPRESS_requestApiKey }}
-
-        - name: CYPRESS_onboardingUrl
-          value: {{ CYPRESS_onboardingUrl }}      
-
-        - name: CYPRESS_apiUrl
-          value: {{ CYPRESS_apiUrl }}
-
-        - name: CYPRESS_apiHostUrl
-          value: {{ CYPRESS_apiHostUrl }}
-
-        - name: AWS_DEFAULT_REGION
-          value: {{ AWS_DEFAULT_REGION }}      
-
-        - name: AWS_REGION
-          value: {{ AWS_REGION }}                                   
-
-        - name: AWS_ACCESS_KEY_ID
-          value: {{ AWS_ACCESS_KEY_ID }}
-
-        - name: AWS_SECRET_ACCESS_KEY
-          value: {{ AWS_SECRET_ACCESS_KEY }}   
-
-      command: ["/bin/bash"]
-      args:
-      - -c 
-      - npm run test
