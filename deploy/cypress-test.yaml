@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: cypress-test-
+  labels:
+    run: cypress-test-unique    
+spec:
+  containers: 
+    - name: cypress-test
+      image: uditgaurav/cypress:ci # please update with your image.
+      imagePullPolicy: Always
+      env:
+        - name: CYPRESS_type # It will take all regions one by one and create pods from entrypoint.sh script
+          value: ''
+
+        - name: CYPRESS_requestApiKey
+          value: ppp
+
+        - name: CYPRESS_onboardingUrl
+          value: default      
+
+        - name: CYPRESS_apiUrl
+          value: default
+
+        - name: CYPRESS_apiHostUrl
+          value: default
+
+        - name: AWS_DEFAULT_REGION
+          value: default      
+
+        - name: AWS_REGION
+          value: default                                   
+
+        - name: AWS_ACCESS_KEY_ID
+          value: default
+
+        - name: AWS_SECRET_ACCESS_KEY
+          value: default   
+
+      command: ["/bin/bash"]
+      args:
+      - -c 
+      - npm run test
