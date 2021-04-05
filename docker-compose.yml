@@ -6,6 +6,9 @@ services:
      context: .
      dockerfile: Dockerfile
    command: npm run test
+   volumes:
+    - "$HOME/.kube:/root/.kube"
+    - "$HOME/.aws:/root/.aws"
    environment:
     - CYPRESS_region=${CYPRESS_region}
     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
