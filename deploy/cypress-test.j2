@@ -20,11 +20,12 @@ spec:
               port: 15021
             initialDelaySeconds: 300
             periodSeconds: 30
+          volumeMounts:
+            - name: aws
+              mountPath: /root/.aws
           env:
             - name: CYPRESS_testType # It will take all regions one by one and create pods from entrypoint.sh script
               value: ''
-            - name: CYPRESS_sharedSecret
-              value: {{ CYPRESS_sharedSecret }}
             - name: CYPRESS_onboardingUrl
               value: {{ CYPRESS_onboardingUrl }}
             - name: CYPRESS_apiUrl
@@ -33,10 +34,12 @@ spec:
               value: {{ CYPRESS_apiHostUrl }}
             - name: AWS_DEFAULT_REGION
               value: {{ AWS_DEFAULT_REGION }}
-            - name: AWS_REGION
-              value: {{ AWS_REGION }}
           command: ["/bin/bash"]
           args:
           - -c
           - DEBUG=cypress:server:plugins DEBUG_DEPTH=0 npm run test_ci
+      volumes:
+      - name: aws
+        hostPath:
+          path: ${HOME}/.aws          
 
