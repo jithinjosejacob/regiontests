@@ -4,7 +4,8 @@
   "description": "Microsoft Website Region Tests",
   "main": "index.js",
   "scripts": {
-    "test": "npx cypress run --spec 'cypress/integration/**.js' --headless"
+    "test": "npx cypress run --spec 'cypress/integration/visitMicrosoft.js' --headless",
+    "go": "npx cypress run --spec 'cypress/integration/visitMicrosoftAndWait.js' --headless"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,6 @@
   },
   "homepage": "https://github.com/jithinjosejacob/regiontests#readme",
   "dependencies": {
-    "cypress": "^6.8.0"
+    "cypress": "^7.5.0"
   }
 }
