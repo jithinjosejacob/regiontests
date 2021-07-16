@@ -1,5 +1,7 @@
 Scenario 1) Tests finishing off before the retry of 50
 
+Run - npm run test
+
 Currently tests takes only 5 seconds to complete in every pod.
 
 After 5 seconds test run will complete
