@@ -23,16 +23,16 @@ AWS_REGION="${AWS_REGION:-default}"
 AWS_ACCESS_KEY_ID_2="${AWS_ACCESS_KEY_ID_2:-default}"
 AWS_SECRET_ACCESS_KEY_2="${AWS_SECRET_ACCESS_KEY_2:-default}"
 
-## Running j2 command to setup variables in the yaml
-./deploy/j2 deploy/cypress-test.j2 > deploy/cypress-test.yaml
 # Declare an array of all target regions to run the test
-declare -a regions=("AU")
-
+declare -a regions=("AU" "BU")
 touch deploy/cypress-all-region-test.yaml
-# Prepare the test pods for all the regions
+
+# Prepare the test pods YAML for all the regions
 for val in ${regions[@]}; do
-   sed -i "/name: CYPRESS_testType/{n;s/.*/              value: "$val"/}" deploy/cypress-test.yaml
-   cat deploy/cypress-test.yaml >> deploy/cypress-all-region-test.yaml
+   ## Running j2 command to setup variables in the yaml
+   export CYPRESS_reasonName=${val}
+   ./deploy/j2/j2 deploy/cypress-test.j2 >> deploy/cypress-all-region-test.yaml
+   echo >> deploy/cypress-all-region-test.yaml
 done
 
 # Create the cypress test
@@ -45,7 +45,7 @@ echo "Waiting for all test pods to get completed .........."
 declare -a array=$( kubectl get pods -n $NS -l run=cypress-test-unique -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}" )
 RETRIES=15
 for i in ${array[@]}; do
-   while ([ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.phase}' )" != "Succeeded" ]); do
+   while ([ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.containerStatuses[0].lastState.terminated.reason}' )" != "Completed" ]); do
       kubectl get pods -n $NS
       echo "Waiting for \"$i\" to get completed ... $RETRIES retries left."
       sleep 10
@@ -62,7 +62,7 @@ head="true"
 FAILED_TESTS=()
 PASSED_TESTS=()
 for i in ${array[@]}; do
-   if [ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.phase}' )" != "Succeeded" ]; then
+   if [ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.containerStatuses[0].lastState.terminated.exitCode}' )" != "0" ] || [ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.containerStatuses[0].lastState.terminated.reason}' )" == "Error" ]; then
       if [ ${head} == "true" ]; then
          echo "Failed test pods are:"
          head="false"

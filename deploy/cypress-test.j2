@@ -25,7 +25,7 @@ spec:
               mountPath: /root/.aws
           env:
             - name: CYPRESS_testType # It will take all regions one by one and create pods from entrypoint.sh script
-              value: ''
+              value: {{ CYPRESS_reasonName }}
             - name: CYPRESS_onboardingUrl
               value: {{ CYPRESS_onboardingUrl }}
             - name: CYPRESS_apiUrl
