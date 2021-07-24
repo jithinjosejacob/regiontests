@@ -45,7 +45,7 @@ echo "Waiting for all test pods to get completed .........."
 declare -a array=$( kubectl get pods -n $NS -l run=cypress-test-unique -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}" )
 RETRIES=15
 for i in ${array[@]}; do
-   while ([ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.containerStatuses[0].lastState.terminated.reason}' )" != "Completed" ]); do
+   while ([ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.containerStatuses[0].lastState.terminated.reason}' )" != "Completed" ] || [ "$( kubectl get pods $i -n $NS -o=jsonpath='{.status.containerStatuses[0].lastState.terminated.reason}' )" != "Error" ]); do
       kubectl get pods -n $NS
       echo "Waiting for \"$i\" to get completed ... $RETRIES retries left."
       sleep 10
