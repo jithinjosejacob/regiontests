@@ -1,45 +1,46 @@
 ---
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Pod
 metadata:
-  generateName: cypress-test-
+  name: cypress-test-{{ CYPRESS_reasonName }}
 spec:
-  backoffLimit: 0
-  template:
-    metadata:
-      labels:
-        run: cypress-test-unique
-    spec:
-      restartPolicy: Never
-      containers:
-        - name: cypress-test
-          image: cypress:latest
-          imagePullPolicy: Always
-          readinessProbe:
-            tcpSocket:
-              port: 15021
-            initialDelaySeconds: 300
-            periodSeconds: 30
-          volumeMounts:
-            - name: aws
-              mountPath: /root/.aws
-          env:
-            - name: CYPRESS_testType # It will take all regions one by one and create pods from entrypoint.sh script
-              value: {{ CYPRESS_reasonName }}
-            - name: CYPRESS_onboardingUrl
-              value: {{ CYPRESS_onboardingUrl }}
-            - name: CYPRESS_apiUrl
-              value: {{ CYPRESS_apiUrl }}
-            - name: CYPRESS_apiHostUrl
-              value: {{ CYPRESS_apiHostUrl }}
-            - name: AWS_DEFAULT_REGION
-              value: {{ AWS_DEFAULT_REGION }}
-          command: ["/bin/bash"]
-          args:
-          - -c
-          - DEBUG=cypress:server:plugins DEBUG_DEPTH=0 npm run test_ci
-      volumes:
-      - name: aws
-        hostPath:
-          path: ${HOME}/.aws          
-
+  containers:
+    - name: cypress-test
+      image: cypress:latest
+      imagePullPolicy: Always
+      readinessProbe:
+        tcpSocket:
+          port: 15021
+        initialDelaySeconds: 300
+        periodSeconds: 30
+      volumeMounts:
+        - name: aws
+          mountPath: /root/.aws
+      env:
+        - name: CYPRESS_testType # It will take all regions one by one and create pods from entrypoint.sh script
+          value: {{ CYPRESS_reasonName }}
+        - name: CYPRESS_onboardingUrl
+          value: {{ CYPRESS_onboardingUrl }}
+        - name: CYPRESS_apiUrl
+          value: {{ CYPRESS_apiUrl }}
+        - name: CYPRESS_apiHostUrl
+          value: {{ CYPRESS_apiHostUrl }}
+        - name: AWS_DEFAULT_REGION
+          value: {{ AWS_DEFAULT_REGION }}
+      command: ["/bin/bash"]
+      args:
+      - -c
+      - DEBUG=cypress:server:plugins DEBUG_DEPTH=0 npm run test_ci
+      tolerations:
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 3600     
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 3600
+  volumes:
+  - name: aws
+    hostPath:
+      path: ${HOME}/.aws          
