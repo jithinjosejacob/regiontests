@@ -31,6 +31,15 @@ spec:
       args:
       - -c
       - DEBUG=cypress:server:plugins DEBUG_DEPTH=0 npm run test_ci
+      tolerations:
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 3600     
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 3600      
   volumes:
   - name: aws
     hostPath:
